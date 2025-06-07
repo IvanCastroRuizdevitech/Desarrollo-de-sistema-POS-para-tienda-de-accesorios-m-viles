@@ -54,10 +54,11 @@ export class WebPlatform implements PlatformAdapter {
       // Crear una ventana oculta y usar window.print()
       const printWindow = window.open('', '_blank');
       if (printWindow) {
-        printWindow.document.write(content);
-        printWindow.document.close();
+        // Usar una aserción de tipo para indicar a TypeScript que printWindow tiene la propiedad document
+        (printWindow as any).document.write(content);
+        (printWindow as any).document.close();
         printWindow.focus();
-        printWindow.print();
+        (printWindow as any).print();
         printWindow.close();
       } else {
         throw new Error('No se pudo abrir ventana de impresión');

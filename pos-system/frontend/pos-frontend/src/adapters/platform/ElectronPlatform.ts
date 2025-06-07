@@ -19,7 +19,11 @@ export class ElectronPlatform implements PlatformAdapter {
     try {
       if (window.electron && window.electron.showSaveDialog) {
         const result = await window.electron.showSaveDialog(options);
-        return result.canceled ? null : result.filePath;
+        // Manejar el caso en que result.filePath sea undefined
+        if (result.canceled || !result.filePath) {
+          return null;
+        }
+        return result.filePath;
       }
       console.warn('API de Electron no disponible para showSaveDialog');
       return null;
@@ -78,10 +82,12 @@ export class ElectronPlatform implements PlatformAdapter {
         // Alternativa: crear una ventana oculta y usar window.print()
         const printWindow = window.open('', '_blank');
         if (printWindow) {
-          printWindow.document.write(content);
-          printWindow.document.close();
+          // Usar una aserción de tipo para indicar a TypeScript que printWindow tiene la propiedad document
+          // Esto es seguro porque sabemos que window.open devuelve un objeto con la propiedad document
+          (printWindow as any).document.write(content);
+          (printWindow as any).document.close();
           printWindow.focus();
-          printWindow.print();
+          (printWindow as any).print();
           printWindow.close();
         } else {
           throw new Error('No se pudo abrir ventana de impresión');
@@ -118,26 +124,6 @@ export class ElectronPlatform implements PlatformAdapter {
         isWeb: false,
       };
     }
-  }
-}
-
-// Ampliar la declaración de tipos para TypeScript
-declare global {
-  interface Window {
-    electron?: {
-      showSaveDialog?: (options: SaveDialogOptions) => Promise<{
-        canceled: boolean;
-        filePath?: string;
-      }>;
-      showOpenDialog?: (options: OpenDialogOptions) => Promise<{
-        canceled: boolean;
-        filePaths: string[];
-      }>;
-      getAppVersion?: () => Promise<string>;
-      printContent?: (content: string) => Promise<void>;
-      platform?: string;
-      // Otras APIs de Electron que puedan estar expuestas
-    };
   }
 }
 

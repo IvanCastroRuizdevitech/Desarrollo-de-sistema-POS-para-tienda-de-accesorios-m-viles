@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, LessThanOrEqual } from 'typeorm';
 import { Inventario } from './entities/inventario.entity';
 import { CreateInventarioDto } from './dto/create-inventario.dto';
 import { UpdateInventarioDto } from './dto/update-inventario.dto';
@@ -88,7 +88,7 @@ export class InventarioService {
 
   async findBajoStock(tienda_id: number, limite: number): Promise<Inventario[]> {
     return this.inventarioRepository.find({
-      where: { tienda_id, saldo: { lessThanOrEqual: limite } },
+      where: { tienda_id, saldo: LessThanOrEqual(limite) },
       relations: ['producto', 'tienda'],
     });
   }

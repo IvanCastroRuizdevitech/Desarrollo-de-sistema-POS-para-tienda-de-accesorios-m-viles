@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { usePlatform } from '../../contexts/PlatformContext';
+import { OpenDialogProperty } from '../platform/PlatformAdapter';
 
 /**
  * Props para el componente FileUploader
@@ -84,8 +85,11 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
       setIsLoading(true);
       
       // Configurar opciones para el diálogo
+      // Usar aserciones de tipo para asegurar que properties sea de tipo OpenDialogProperty[]
+      const properties: OpenDialogProperty[] = multiple ? ['openFile', 'multiSelections'] : ['openFile'];
+      
       const options = {
-        properties: multiple ? ['openFile', 'multiSelections'] : ['openFile'],
+        properties,
         filters: [
           { name: 'Todos los archivos', extensions: ['*'] }
         ]

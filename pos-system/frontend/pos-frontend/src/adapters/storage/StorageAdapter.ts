@@ -39,3 +39,6 @@ export interface StorageAdapter {
   has(key: string): Promise<boolean>;
 }
 
+// Exportación por defecto para asegurar compatibilidad
+export default StorageAdapter;
+

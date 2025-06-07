@@ -4,6 +4,13 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { Request } from 'express';
+
+// Extiende la interfaz SessionData para incluir userId
+declare module 'express-session' {
+  interface SessionData {
+    userId?: string;
+  }
+}
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { getClientType } from '../../utils/environment';

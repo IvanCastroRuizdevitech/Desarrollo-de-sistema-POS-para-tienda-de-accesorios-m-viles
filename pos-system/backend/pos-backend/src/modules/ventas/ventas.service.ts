@@ -61,6 +61,9 @@ export class VentasService {
         }
         
         // Calcular subtotal con impuesto
+        if (!producto) {
+          throw new NotFoundException(`Producto con ID ${producto_id} no encontrado`);
+        }
         const precioUnitario = producto.precio;
         const impuestoPorcentaje = producto.impuesto ? producto.impuesto.porcentaje / 100 : 0;
         const subtotal = precioUnitario * cantidad * (1 + impuestoPorcentaje);
@@ -88,6 +91,10 @@ export class VentasService {
           where: { id: producto_id },
           relations: ['impuesto'],
         });
+
+        if (!producto) {
+          throw new NotFoundException(`Producto con ID ${producto_id} no encontrado`);
+        }
         
         // Calcular subtotal con impuesto
         const precioUnitario = producto.precio;
@@ -108,6 +115,10 @@ export class VentasService {
         const inventario = await this.inventarioRepository.findOne({
           where: { producto_id, tienda_id },
         });
+
+        if (!inventario) {
+          throw new NotFoundException(`Inventario para producto ${producto_id} en tienda ${tienda_id} no encontrado`);
+        }
         
         const nuevoSaldo = inventario.saldo - cantidad;
         

@@ -98,19 +98,3 @@ export class ElectronStorage implements StorageAdapter {
   }
 }
 
-// Declaración de tipos para TypeScript
-declare global {
-  interface Window {
-    electron?: {
-      store: {
-        get: (key: string) => Promise<any>;
-        set: (key: string, value: any) => Promise<void>;
-        delete: (key: string) => Promise<void>;
-        clear?: () => Promise<void>;
-        has?: (key: string) => Promise<boolean>;
-      };
-      // Otras APIs de Electron que puedan estar expuestas
-    };
-  }
-}
-

@@ -24,6 +24,7 @@ import {
   Tabs,
   Tab,
   CircularProgress,
+  LinearProgress,
   Alert,
   Snackbar,
   Autocomplete,
@@ -74,7 +75,8 @@ import {
   CalendarToday as CalendarIcon,
   AttachMoney as MoneyIcon
 } from '@mui/icons-material';
-import { saleService, productService, paymentMethodService } from '../services/api';
+import { saleService, productService } from '../services/api';
+import paymentMethodService from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationContext';
 import { format } from 'date-fns';

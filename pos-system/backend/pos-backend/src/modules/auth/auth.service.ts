@@ -10,6 +10,13 @@ import { RegisterDto } from './dto/register.dto';
 import { Request } from 'express';
 import { isElectronRequest, getClientType } from '../../utils/environment';
 
+// Extender la interfaz SessionData para incluir userRole
+declare module 'express-session' {
+  interface SessionData {
+    userRole?: string;
+  }
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -66,7 +73,7 @@ export class AuthService {
 
     // Si es una petición web, establecer la sesión
     if (!isElectronRequest(req) && req.session) {
-      req.session.userId = usuario.id;
+      req.session.userId = usuario.id.toString();
       req.session.userRole = usuario.rol.nombre;
     }
 
@@ -180,7 +187,7 @@ export class AuthService {
       throw new UnauthorizedException('Sesión no válida');
     }
 
-    return this.validateUser(req.session.userId);
+    return this.validateUser(Number(req.session.userId));
   }
 
   /**

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, Between } from 'typeorm';
 import { Kardex } from './entities/kardex.entity';
 import { Inventario } from '../inventario/entities/inventario.entity';
 import { CreateKardexDto } from './dto/create-kardex.dto';
@@ -130,10 +130,7 @@ export class KardexService {
   async findByFechas(fechaInicio: Date, fechaFin: Date): Promise<Kardex[]> {
     return this.kardexRepository.find({
       where: {
-        fecha: {
-          gte: fechaInicio,
-          lte: fechaFin,
-        },
+        fecha: Between(fechaInicio, fechaFin),
       },
       relations: ['producto', 'tienda'],
       order: { fecha: 'DESC' },
